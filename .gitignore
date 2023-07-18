@@ -44,5 +44,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+__pycache__
+
 imgs/
 my_database.db
