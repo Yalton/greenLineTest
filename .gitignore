@@ -44,7 +44,11 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-__pycache__
+dist/
+__pycache__/
 
 imgs/
 my_database.db
+
+old.tsconfig.json
+package-lock.json
