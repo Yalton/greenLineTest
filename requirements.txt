@@ -1,0 +1,16 @@
+numpy
+torch
+scipy
+aiohttp
+beautifulsoup4
+webencodings
+protobuf
+tensorflow==2.10.0
+tensorflow_hub
+pillow
+numpy
+nvidia-tensorrt
+nvidia-pyindex
+python-multipart
+fastapi
+uvicorn
