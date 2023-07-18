@@ -2,6 +2,8 @@ from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
 from PIL import Image
 import io
+# from io import BytesIO
+import base64
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -10,8 +12,13 @@ import tensorflow_hub as hub
 from scipy.stats import linregress
 import matplotlib.patches as patches
 from typing import List
+from pydantic import BaseModel
+
 
 app = FastAPI()
+
+class Item(BaseModel):
+    base64_image: str
 
 # Load the pose estimation model from TensorFlow Hub
 ssd_mobilenet = hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2')
@@ -33,7 +40,7 @@ def calculate_slope_and_annotate(ax, midpoints_x, midpoints_y, person_idx, image
 
         # Scale the position and font size based on image width and height
         position = (image_width * 0.05, image_height * (0.005 + person_idx * 0.05))
-        fontsize = np.log(width) * 2
+        fontsize = np.log(image_width) * 2
 
         ax.text(position[0], position[1], text, color='green', fontsize=fontsize, ha='left', va='top', bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
@@ -50,10 +57,13 @@ def check_overlap(box1, box2):
 
 
 @app.post("/predict")
-async def predict(file: UploadFile):
-    image = Image.open(io.BytesIO(await file.read()))
+async def predict(item: Item):
+    base64_image = item.base64_image
+    image_bytes = base64.b64decode(base64_image)
+    image = Image.open(io.BytesIO(image_bytes))
+
+    # Convert the image to numpy array
     image_np = np.array(image)
-    image_np = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
 
     # Convert the image to the size the SSD MobileNet model expects and add a batch dimension
     input_tensor = tf.convert_to_tensor(image_np)
@@ -176,9 +186,14 @@ async def predict(file: UploadFile):
     ax2.axis('off')  # to remove axes
 
 
-    # To save the image
-    fig2.savefig('output_with_midline.jpg', bbox_inches='tight', pad_inches=0)
+    # Create a BytesIO object
+    buf = io.BytesIO()
 
+    # Save the figure to the BytesIO object
+    plt.savefig(buf, format='png')
 
-    # Return the keypoints
-    return JSONResponse(content={"result": "Image processed and saved successfully."})
+    # Get the base64 representation
+    base64_image = base64.b64encode(buf.getvalue()).decode()
+
+    # Return the base64 string
+    return JSONResponse(content={"base64_image": base64_image})
