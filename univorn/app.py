@@ -107,18 +107,18 @@ async def predict(item: Item):
         # Filter the bounding boxes based on the detection class and score
         people_boxes = boxes_img_scale[(classes == 1) & (scores > score_threshold)]
 
-        # Iterate through each bounding box
-        for box_idx, box in enumerate(people_boxes):
-            ymin, xmin, ymax, xmax = box
-            ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
-            xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
+        # # Iterate through each bounding box
+        # for box_idx, box in enumerate(people_boxes):
+        #     ymin, xmin, ymax, xmax = box
+        #     ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
+        #     xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
 
-            # Create a Rectangle patch
-            rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
+        #     # Create a Rectangle patch
+        #     rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
 
-            if debug:
-                # Add the patch to the Axes
-                ax2.add_patch(rect)
+        #     if debug:
+        #         # Add the patch to the Axes
+        #         ax2.add_patch(rect)
 
         # Get the number of people detected by the bounding boxes
         N = len(people_boxes)

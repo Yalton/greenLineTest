@@ -7,7 +7,7 @@ import numpy as np
 model = hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2')
 
 # Load the image
-image_np = cv2.imread('image10.jpg')
+image_np = cv2.imread('IMG_1610.jpg')
 
 # Convert the image to RGB
 image_rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)

@@ -32,7 +32,7 @@ model = hub.load('https://tfhub.dev/google/movenet/multipose/lightning/1')
 movenet = model.signatures['serving_default']
 
 # Load the image
-image = Image.open('image10.jpg').convert('RGB')
+image = Image.open('IMG_1610.jpg').convert('RGB')
 
 # Convert the image to numpy array
 image_np = np.array(image)

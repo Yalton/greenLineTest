@@ -10,6 +10,15 @@ import matplotlib.patches as patches
 # Set the debug variable
 debug = True
 
+NOSE_KEYPOINT_INDEX = 0
+CONFIDENCE_THRESHOLD = 0.1  # adjust this value to your needs
+
+def has_nose_keypoint(person):
+    nose_keypoint_confidence = person[NOSE_KEYPOINT_INDEX, 2]
+    print(f"Nose keypoint confidence for person {idx}: {nose_keypoint_confidence}")
+    return nose_keypoint_confidence > CONFIDENCE_THRESHOLD
+
+
 def calculate_slope_and_annotate(ax, midpoints_x, midpoints_y, person_idx, image_width, image_height):
     if len(midpoints_x) >= 2 and len(midpoints_y) >= 2:
         slope, intercept, r_value, p_value, std_err = linregress(midpoints_x, midpoints_y)
@@ -30,6 +39,29 @@ def get_bounding_box(keypoints):
     max_y = np.max(keypoints[:, 0])
     return [min_y, min_x, max_y, max_x]
 
+def is_within_box(box, keypoints):
+    """
+    Check if all keypoints of a person are within a bounding box.
+
+    Parameters
+    ----------
+    box : numpy.ndarray
+        Normalized bounding box in the format [y1, x1, y2, x2].
+    keypoints : numpy.ndarray
+        Array of normalized keypoints for a person.
+
+    Returns
+    -------
+    bool
+        True if all keypoints are within the bounding box, False otherwise.
+    """
+    y1, x1, y2, x2 = box
+    for keypoint in keypoints:
+        y, x, _ = keypoint
+        if not (y1 <= y <= y2 and x1 <= x <= x2):
+            return False
+    return True
+
 def check_overlap(box1, box2):
     return not (box1[2] < box2[0] or box1[0] > box2[2] or box1[3] < box2[1] or box1[1] > box2[3])
 
@@ -40,7 +72,7 @@ ssd_mobilenet = hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2')
 movenet = hub.load('https://tfhub.dev/google/movenet/multipose/lightning/1').signatures['serving_default']
 
 # Load the image
-image = Image.open('image10.jpg').convert('RGB')
+image = Image.open('IMG_1610.jpg').convert('RGB')
 
 # Convert the image to numpy array
 image_np = np.array(image)
@@ -81,23 +113,23 @@ ax2.imshow(image_np)
 # Define a threshold for the detection score
 score_threshold = 0.5
 
-boxes_img_scale = boxes * [image_np.shape[0], image_np.shape[1], image_np.shape[0], image_np.shape[1]]
+# boxes_img_scale = boxes * [image_np.shape[0], image_np.shape[1], image_np.shape[0], image_np.shape[1]]
 
 # Filter the bounding boxes based on the detection class and score
-people_boxes = boxes_img_scale[(classes == 1) & (scores > score_threshold)]
+people_boxes = boxes[(classes == 1) & (scores > score_threshold)]
 
-# Iterate through each bounding box
-for box_idx, box in enumerate(people_boxes):
-    ymin, xmin, ymax, xmax = box
-    ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
-    xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
+# # Iterate through each bounding box
+# for box_idx, box in enumerate(people_boxes):
+#     ymin, xmin, ymax, xmax = box
+#     ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
+#     xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
 
-    # Create a Rectangle patch
-    rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
+#     # Create a Rectangle patch
+#     rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
 
-    if debug:
-        # Add the patch to the Axes
-        ax2.add_patch(rect)
+#     if debug:
+#         # Add the patch to the Axes
+#         ax2.add_patch(rect)
 
 # Get the number of people detected by the bounding boxes
 N = len(people_boxes)
@@ -111,22 +143,30 @@ sorted_indices = np.argsort(total_confidence_scores)[::-1]
 # Select the top N instances
 selected_indices = sorted_indices[:N] 
 
-selected_instances = []
-for idx in sorted_indices:
+valid_indices = []
+print(f"# of people detected {N}")
+for idx in selected_indices:  # Loop through selected_indices instead of sorted_indices[:5]
     person = keypoints_with_scores[idx]
-    overlaps = False
-    for selected_person in selected_instances:
-        # Get the bounding boxes for the current person and the selected person
-        person_box = get_bounding_box(person)
-        selected_person_box = get_bounding_box(selected_person)
-        # Check if person overlaps with selected_person
-        if check_overlap(person_box, selected_person_box):
-            overlaps = True
-            break
-    if not overlaps:
-        selected_instances.append(person)
-    if len(selected_instances) == N:
-        break
+    if not has_nose_keypoint(person):
+        print(f"Person # {idx} has no nose")
+        continue
+    print(f"Person # {idx} keypoints:")
+    print(person[:, :2])  # Print the keypoints of the person
+    for box in people_boxes:
+        print(f"Bounding box: {box}")
+        if is_within_box(box, person):
+            print(f"Person # {idx} is within the bounding box")
+            valid_indices.append(idx)  # add the index to the valid_indices list
+            break  # break the loop once a match is found
+        else:
+            print(f"Person # {idx} is not within the bounding box")
+
+# Now, we will use the valid_indices list to access the corresponding persons in keypoints_with_scores_norm
+selected_instances = [keypoints_with_scores[idx] for idx in valid_indices]
+
+print(f"# of selected people {len(selected_instances)}")
+
+
 
 for person_idx, person in enumerate(selected_instances):
     midpoints_x = []

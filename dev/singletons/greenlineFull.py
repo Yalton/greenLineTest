@@ -36,7 +36,7 @@ ssd_mobilenet = hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2')
 movenet = hub.load('https://tfhub.dev/google/movenet/singlepose/lightning/1').signatures['serving_default']
 
 # Load the image
-image = Image.open('image1.jpg').convert('RGB')
+image = Image.open('IMG_1610.jpg').convert('RGB')
 
 # Convert the image to numpy array
 image_np = np.array(image)

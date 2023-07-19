@@ -52,3 +52,4 @@ my_database.db
 
 old.tsconfig.json
 package-lock.json
+dev/tfhub_modules/
