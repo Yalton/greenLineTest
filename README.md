@@ -53,20 +53,23 @@
 
 ## About The Project
 
-All you need to do is enter the URL of the VOD you want to download, choose your preferred resolution, and voilà 
-a download link will appear. Please note, higher resolutions lead to larger files and may take a bit longer to
-download.
+Finally a mathematical representation of how Alpha/Beta the subjects of any photo are
 
-Tool automatically cleans downloads that are older than 8 hours, i.e your vods are not saved on the server
-longterm. Which for you means two things
 
-Offical Hosted Instance is available at [link](https://kvlogdl.billbert.co)
+This web app uses machine learning to perform a green line test and assign each person in the photo a "Chad Score" based on the slope of their lean
+
+The app works well with images wherein both people are facing the camera and not overlapping too much with one and other
+
+Offical Hosted Instance is available at [link](https://greenlinetest.billbert.co/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ### Built With
 
+* [![Python][python-badge]][python-url]
+* [![TensorFlow][tensorflow-badge]][tensorflow-url]
+* [![OpenCV][opencv-badge]][opencv-url]
 * [![Node.js][nodejs-badge]][nodejs-url]
 * [![Express.js][expressjs-badge]][expressjs-url]
 * [![TypeScript][typescript-badge]][typescript-url]
@@ -81,7 +84,7 @@ Offical Hosted Instance is available at [link](https://kvlogdl.billbert.co)
 ## Getting Started
 
 Clone the repository to your local system 
-
+<!-- 
 ### Prerequisites
 
 You will require some local system packages to make the app function properly 
@@ -141,7 +144,7 @@ Follow steps 1-6
     docker compose up -d
    ```
 
-Either solution will be accesible from the same interface @ localhost:3000
+Either solution will be accesible from the same interface @ localhost:3000 -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -150,9 +153,8 @@ Either solution will be accesible from the same interface @ localhost:3000
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Improve Queue system
-- [ ] Allow certain users to bypass queue under given circumstances
-- [ ] Improve overall UI
+- [ ] Improve model which detects people (Dark colors and obscured figures confuse it currently)
+- [ ] Add more features in general 
 
 See the [open issues](https://github.com/Yalton/kickVlogDL/issues) for a full list of proposed features (and known issues).
 
