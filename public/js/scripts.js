@@ -1,6 +1,11 @@
-window.onload = function () {
+function handleFormSubmission() {
     document.getElementById('uploadForm').addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // Get the spinner and start it
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        loadingSpinner.style.display = 'block';
+
         const formData = new FormData();
         formData.append('image', document.getElementById('image').files[0]);
 
@@ -15,7 +20,7 @@ window.onload = function () {
         }).then(data => {
             // Create a URL for the base64 image
             const url = 'data:image/png;base64,' + data.base64_image;
-            
+
             // Update the image element
             const outputImage = document.getElementById('outputImage');
             outputImage.src = url;
@@ -23,11 +28,108 @@ window.onload = function () {
             // Update the download button
             const downloadButton = document.getElementById('downloadButton');
             downloadButton.href = url;
+            downloadButton.style.display = 'inline-block';
+
+            // Stop the spinner
+            loadingSpinner.style.display = 'none';
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
+
+            // Stop the spinner even if there's an error
+            loadingSpinner.style.display = 'none';
         });
     });
 }
+
+
+function startAnimation() {
+    let canvas = document.getElementById('backgroundCanvas');
+    let ctx = canvas.getContext('2d');
+
+    // Create an array to hold the lines
+    let lines = [];
+
+    // Create six lines
+    for (let i = 0; i < 6; i++) {
+        lines.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 10,
+            vy: (Math.random() - 0.5) * 10,
+            color: `hsl(${Math.random() * 360}, 100%, 50%)` // Use hsl to get different colors for each line
+        });
+    }
+
+    function animate() {
+        // Clear the canvas with a semi-transparent color to create a trail effect
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Loop over each line
+        for (let line of lines) {
+            // Update position
+            line.x += line.vx;
+            line.y += line.vy;
+
+            // Reverse velocity when hitting an edge
+            if (line.x < 0 || line.x > canvas.width) line.vx = -line.vx;
+            if (line.y < 0 || line.y > canvas.height) line.vy = -line.vy;
+
+            // Draw the line
+            ctx.strokeStyle = line.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(line.x - line.vx, line.y - line.vy);
+            ctx.lineTo(line.x, line.y);
+            ctx.stroke();
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+
+// function handleFormSubmission() {
+//     document.getElementById('uploadForm').addEventListener('submit', function (e) {
+//         e.preventDefault();
+//         const formData = new FormData();
+//         formData.append('image', document.getElementById('image').files[0]);
+
+//         fetch('/predict', {
+//             method: 'POST',
+//             body: formData
+//         }).then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         }).then(data => {
+//             // Create a URL for the base64 image
+//             const url = 'data:image/png;base64,' + data.base64_image;
+            
+//             // Update the image element
+//             const outputImage = document.getElementById('outputImage');
+//             outputImage.src = url;
+
+//             // Update the download button
+//             const downloadButton = document.getElementById('downloadButton');
+//             downloadButton.href = url;
+
+//             // Show the download button
+//             downloadButton.style.display = 'inline-block';
+//         }).catch(error => {
+//             console.error('There has been a problem with your fetch operation:', error);
+//         });
+//     });
+// }
+
+window.onload = function() {
+    handleFormSubmission();
+    startAnimation();
+}
+
 
 
 // async function getFormats() {

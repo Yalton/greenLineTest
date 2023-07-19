@@ -31,20 +31,43 @@
 </head>
 
 <body>
+    <canvas id="backgroundCanvas"></canvas>
     <div class="main-container">
-        <canvas id="backgroundCanvas"></canvas>
         <div class="content-container">
+            <div class="header-container">
+                <h1>Greenline Test || Chad Score Calculator</h1>
+                <h4 class="green-italic">Fellas, never lean in</h4>
+                <hr>
+                <p>Finally a mathematical representation of how Alpha/Beta the subjects of any photo are</p>
+                <br>
+                <p>This web app uses machine learning to perform a <a class="inline-link" href="https://knowyourmeme.com/memes/green-line-test-dont-lean-in" >green line test</a> and assign each person in the photo
+                    a "Chad Score" based on the slope of their lean</p>
+                <p>The app works well with images wherein both people are facing the camera and not overlapping too much with one and other </p>
+                <ul class="left-justify">
+                    <li><a href="img/example.jpg" >Sample Image</a></li>
+                    <li><a href="img/exampleResult.jpg" >Sample Result</a></li>
+                </ul>
+                <br>
+                <br>
+            </div>
             <form id="uploadForm" enctype="multipart/form-data">
-                <label for="image">Upload an image:</label><br>
+                <label class="bold-underline" for="image">Upload an image:</label><br>
                 <input type="file" id="image" name="image" accept="image/*" required><br>
                 <button type="submit">Submit</button>
             </form>
             <br>
+            <br>
+            <div id="loadingSpinner" class="spinner"></div>
             <img id="outputImage" src="" alt="">
             <br>
             <a id="downloadButton" href="" download="output.png">Download Processed Image</a>
         </div>
+    <div id="footer">
+        <p> Created by <a class="inline-link" href="http://bit.ly/m/yalt">Yalt</a>.<img class="footer-logo"
+                src="img/yaltLogo.png" alt="Logo"></p>
     </div>
+    </div>
+
 </body>
 
 

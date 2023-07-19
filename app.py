@@ -190,7 +190,7 @@ async def predict(item: Item):
     buf = io.BytesIO()
 
     # Save the figure to the BytesIO object
-    plt.savefig(buf, format='png')
+    plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
 
     # Get the base64 representation
     base64_image = base64.b64encode(buf.getvalue()).decode()

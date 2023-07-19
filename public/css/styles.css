@@ -12,19 +12,21 @@ body {
 
 .main-container {
     position: relative;
-    width: 600px;
-    height: 800px;
-    background-color: #000;
+    /* min-width: 600px;
+    min-height: 800px; */
+    /* max-height: 90vh;  */
+    background-color: #333;  /* Dark grey background */
+    border: 2px solid #000;  /* Black border */
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    box-sizing: border-box;  /* Include border and padding in element's total width and height */
 }
 
 #backgroundCanvas {
-    position: absolute;
+    position: fixed;  /* Change this from absolute to fixed */
     top: 0;
     left: 0;
     width: 100%;
@@ -35,6 +37,10 @@ body {
     position: relative;
     z-index: 1;
     text-align: center;
+    max-height: 90vh;  
+    overflow-y: auto;  
+    width: 100%;  
+    padding: 20px;  
 }
 
 form {
@@ -66,4 +72,94 @@ img {
     height: auto;
     display: block;
     margin: 0 auto;
+}
+
+button, #downloadButton {
+    padding: 10px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;  /* Add this line */
+    width: 80%;
+    box-sizing: border-box;  /* Include padding in element's total width */
+    text-align: center;  /* Center the text */
+}
+
+#downloadButton {
+    display: none; /* This hides the button initially */
+    /* the rest of your styles... */
+}
+
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid lime;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    display: none;
+    z-index: 9999;
+    position: absolute;
+    left: 50%;
+    top: 60%;  /* Adjust this to move the spinner down */
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+a {
+    display: block;
+    margin-top: 20px;
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #45a049;
+}
+
+
+#footer {
+    flex: 0 0 100%;
+    text-align: center;
+    margin-top: 20px;
+    color: #454545;
+}
+
+.footer-logo{
+    height: 2em;
+    vertical-align: middle;
+    display: inline;
+}
+
+a.inline-link {
+    display: inline;
+    margin-top: 0;  
+}
+
+.left-justify {
+    text-align: left;
+    width: 80%;  /* This should match the width of your form */
+    margin: 0 auto;  /* Center the ul element */
+    list-style-position: inside;  /* Position the bullets inside the ul */
+}
+
+.left-justify li a {
+    display: inline;  /* Change from block to inline */
+}
+
+.green-italic {
+    color: green;
+    font-style: italic;
+}
+
+.bold-underline {
+    font-weight: bold;
+    text-decoration: underline;
 }
