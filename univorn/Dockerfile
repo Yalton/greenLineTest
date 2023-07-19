@@ -1,5 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8
+# Use an official TensorFlow runtime as a parent image
+FROM tensorflow/tensorflow:2.10.0-gpu
 
 # Set the working directory in the container to /app
 WORKDIR /app
