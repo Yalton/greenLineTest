@@ -58,142 +58,145 @@ def check_overlap(box1, box2):
 
 @app.post("/predict")
 async def predict(item: Item):
-    base64_image = item.base64_image
-    image_bytes = base64.b64decode(base64_image)
-    image = Image.open(io.BytesIO(image_bytes))
+    try:
+        base64_image = item.base64_image
+        image_bytes = base64.b64decode(base64_image)
+        image = Image.open(io.BytesIO(image_bytes))
 
-    # Convert the image to numpy array
-    image_np = np.array(image)
+        # Convert the image to numpy array
+        image_np = np.array(image)
 
-    # Convert the image to the size the SSD MobileNet model expects and add a batch dimension
-    input_tensor = tf.convert_to_tensor(image_np)
-    input_tensor = input_tensor[tf.newaxis,...]
+        # Convert the image to the size the SSD MobileNet model expects and add a batch dimension
+        input_tensor = tf.convert_to_tensor(image_np)
+        input_tensor = input_tensor[tf.newaxis,...]
 
-    # Run the image through the SSD MobileNet model
-    output_dict = ssd_mobilenet(input_tensor)
+        # Run the image through the SSD MobileNet model
+        output_dict = ssd_mobilenet(input_tensor)
 
-    # The output is a dictionary with keys for 'detection_scores', 'detection_classes', and 'detection_boxes'
-    scores = output_dict['detection_scores'].numpy()[0]
-    classes = output_dict['detection_classes'].numpy()[0]
-    boxes = output_dict['detection_boxes'].numpy()[0]
+        # The output is a dictionary with keys for 'detection_scores', 'detection_classes', and 'detection_boxes'
+        scores = output_dict['detection_scores'].numpy()[0]
+        classes = output_dict['detection_classes'].numpy()[0]
+        boxes = output_dict['detection_boxes'].numpy()[0]
 
-    # Resize the image to the size the model expects and add a batch dimension
-    image = tf.image.resize(image_np, (384, 640))
-    image = tf.expand_dims(image, axis=0)
+        # Resize the image to the size the model expects and add a batch dimension
+        image = tf.image.resize(image_np, (384, 640))
+        image = tf.expand_dims(image, axis=0)
 
-    # Run the image through the model
-    outputs = movenet(tf.cast(image, dtype=tf.int32))
+        # Run the image through the model
+        outputs = movenet(tf.cast(image, dtype=tf.int32))
 
-    # The output is a dictionary with a 'output_0' key that contains the pose keypoints
-    keypoints_with_scores = outputs['output_0'].numpy()[:,:,:51].reshape((6,17,3))
+        # The output is a dictionary with a 'output_0' key that contains the pose keypoints
+        keypoints_with_scores = outputs['output_0'].numpy()[:,:,:51].reshape((6,17,3))
 
-    #pairs = [(0, 1), (0, 2), (0, 3), (0, 4), (5, 6), (11, 12), (13, 14), (15, 16)]
-    pairs = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16)]
+        #pairs = [(0, 1), (0, 2), (0, 3), (0, 4), (5, 6), (11, 12), (13, 14), (15, 16)]
+        pairs = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16)]
 
-    # Create a figure and axes
-    fig1, ax1 = plt.subplots(figsize=(10, 10))  # For bounding boxes
-    fig2, ax2 = plt.subplots(figsize=(10, 10))  # For midlines and slope annotations
+        # Create a figure and axes
+        fig1, ax1 = plt.subplots(figsize=(10, 10))  # For bounding boxes
+        fig2, ax2 = plt.subplots(figsize=(10, 10))  # For midlines and slope annotations
 
-    # Display the image on the axes
-    #ax1.imshow(image_np)
-    ax2.imshow(image_np)
+        # Display the image on the axes
+        #ax1.imshow(image_np)
+        ax2.imshow(image_np)
 
-    # Define a threshold for the detection score
-    score_threshold = 0.5
+        # Define a threshold for the detection score
+        score_threshold = 0.5
 
-    boxes_img_scale = boxes * [image_np.shape[0], image_np.shape[1], image_np.shape[0], image_np.shape[1]]
+        boxes_img_scale = boxes * [image_np.shape[0], image_np.shape[1], image_np.shape[0], image_np.shape[1]]
 
-    # Filter the bounding boxes based on the detection class and score
-    people_boxes = boxes_img_scale[(classes == 1) & (scores > score_threshold)]
+        # Filter the bounding boxes based on the detection class and score
+        people_boxes = boxes_img_scale[(classes == 1) & (scores > score_threshold)]
 
-    # Iterate through each bounding box
-    for box_idx, box in enumerate(people_boxes):
-        ymin, xmin, ymax, xmax = box
-        ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
-        xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
+        # Iterate through each bounding box
+        for box_idx, box in enumerate(people_boxes):
+            ymin, xmin, ymax, xmax = box
+            ymin, ymax = ymin * image_np.shape[0], ymax * image_np.shape[0]
+            xmin, xmax = xmin * image_np.shape[1], xmax * image_np.shape[1]
 
-        # Create a Rectangle patch
-        rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
+            # Create a Rectangle patch
+            rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), linewidth=1, edgecolor='r', facecolor='none')
 
-        if debug:
-            # Add the patch to the Axes
-            ax2.add_patch(rect)
+            if debug:
+                # Add the patch to the Axes
+                ax2.add_patch(rect)
 
-    # Get the number of people detected by the bounding boxes
-    N = len(people_boxes)
+        # Get the number of people detected by the bounding boxes
+        N = len(people_boxes)
 
-    # Get total confidence score for each instance
-    total_confidence_scores = [np.sum(person[:, 2]) for person in keypoints_with_scores]
+        # Get total confidence score for each instance
+        total_confidence_scores = [np.sum(person[:, 2]) for person in keypoints_with_scores]
 
-    # Get indices of instances sorted by total confidence score
-    sorted_indices = np.argsort(total_confidence_scores)[::-1]
+        # Get indices of instances sorted by total confidence score
+        sorted_indices = np.argsort(total_confidence_scores)[::-1]
 
-    # Select the top N instances
-    selected_indices = sorted_indices[:N] 
+        # Select the top N instances
+        selected_indices = sorted_indices[:N] 
 
-    selected_instances = []
-    for idx in sorted_indices:
-        person = keypoints_with_scores[idx]
-        overlaps = False
-        for selected_person in selected_instances:
-            # Get the bounding boxes for the current person and the selected person
-            person_box = get_bounding_box(person)
-            selected_person_box = get_bounding_box(selected_person)
-            # Check if person overlaps with selected_person
-            if check_overlap(person_box, selected_person_box):
-                overlaps = True
+        selected_instances = []
+        for idx in sorted_indices:
+            person = keypoints_with_scores[idx]
+            overlaps = False
+            for selected_person in selected_instances:
+                # Get the bounding boxes for the current person and the selected person
+                person_box = get_bounding_box(person)
+                selected_person_box = get_bounding_box(selected_person)
+                # Check if person overlaps with selected_person
+                if check_overlap(person_box, selected_person_box):
+                    overlaps = True
+                    break
+            if not overlaps:
+                selected_instances.append(person)
+            if len(selected_instances) == N:
                 break
-        if not overlaps:
-            selected_instances.append(person)
-        if len(selected_instances) == N:
-            break
 
-    for person_idx, person in enumerate(selected_instances):
-        midpoints_x = []
-        midpoints_y = []
+        for person_idx, person in enumerate(selected_instances):
+            midpoints_x = []
+            midpoints_y = []
 
-        # For each pair of keypoints, calculate the midpoint and add it to the lists
-        for i, j in pairs:
-            if person[i][2] > 0.1 and person[j][2] > 0.1:
-                midpoint_x = (person[i][1] + person[j][1]) / 2
-                midpoint_y = (person[i][0] + person[j][0]) / 2
-                midpoints_x.append(midpoint_x)
-                midpoints_y.append(midpoint_y)
+            # For each pair of keypoints, calculate the midpoint and add it to the lists
+            for i, j in pairs:
+                if person[i][2] > 0.1 and person[j][2] > 0.1:
+                    midpoint_x = (person[i][1] + person[j][1]) / 2
+                    midpoint_y = (person[i][0] + person[j][0]) / 2
+                    midpoints_x.append(midpoint_x)
+                    midpoints_y.append(midpoint_y)
 
-        # Convert coordinates to image's scale
-        midpoints_x_img = np.array(midpoints_x) * image_np.shape[1]
-        midpoints_y_img = np.array(midpoints_y) * image_np.shape[0]
+            # Convert coordinates to image's scale
+            midpoints_x_img = np.array(midpoints_x) * image_np.shape[1]
+            midpoints_y_img = np.array(midpoints_y) * image_np.shape[0]
 
-        # Calculate slope and annotate image
-        if midpoints_x_img.size != 0 and midpoints_y_img.size != 0: 
-            height, width, _ = image_np.shape
-            calculate_slope_and_annotate(ax2, midpoints_x_img, midpoints_y_img, person_idx, width, height)
-            
-            # Add a label at the position of the first keypoint
-            head_keypoint_x = person[0][1] * width
-            head_keypoint_y = person[0][0] * height
-            fontsize = np.log(width) * 2
-            ax2.text(head_keypoint_x, (head_keypoint_y - (height * (0.05))), f"{person_idx + 1}", color='green', fontsize=fontsize, ha='left', va='bottom', bbox=dict(facecolor='white', alpha=0.5, edgecolor='none'))
-            
-            
-        # Plot a line connecting the midpoints
-        ax2.plot(midpoints_x_img, midpoints_y_img, 'g-', linewidth=2)
+            # Calculate slope and annotate image
+            if midpoints_x_img.size != 0 and midpoints_y_img.size != 0: 
+                height, width, _ = image_np.shape
+                calculate_slope_and_annotate(ax2, midpoints_x_img, midpoints_y_img, person_idx, width, height)
+                
+                # Add a label at the position of the first keypoint
+                head_keypoint_x = person[0][1] * width
+                head_keypoint_y = person[0][0] * height
+                fontsize = np.log(width) * 2
+                ax2.text(head_keypoint_x, (head_keypoint_y - (height * (0.05))), f"{person_idx + 1}", color='green', fontsize=fontsize, ha='left', va='bottom', bbox=dict(facecolor='white', alpha=0.5, edgecolor='none'))
+                
+                
+            # Plot a line connecting the midpoints
+            ax2.plot(midpoints_x_img, midpoints_y_img, 'g-', linewidth=2)
 
-    # # Display the image on the axes
-    ax2.imshow(image_np)
+        # # Display the image on the axes
+        ax2.imshow(image_np)
 
-    ax1.axis('off')  # to remove axes
-    ax2.axis('off')  # to remove axes
+        ax1.axis('off')  # to remove axes
+        ax2.axis('off')  # to remove axes
 
 
-    # Create a BytesIO object
-    buf = io.BytesIO()
+        # Create a BytesIO object
+        buf = io.BytesIO()
 
-    # Save the figure to the BytesIO object
-    plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+        # Save the figure to the BytesIO object
+        plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
 
-    # Get the base64 representation
-    base64_image = base64.b64encode(buf.getvalue()).decode()
+        # Get the base64 representation
+        base64_image = base64.b64encode(buf.getvalue()).decode()
 
-    # Return the base64 string
-    return JSONResponse(content={"base64_image": base64_image})
+        # Return the base64 string
+        return JSONResponse(content={"base64_image": base64_image})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})

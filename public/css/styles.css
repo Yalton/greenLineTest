@@ -104,9 +104,10 @@ button, #downloadButton {
     z-index: 9999;
     position: absolute;
     left: 50%;
-    top: 60%;  /* Adjust this to move the spinner down */
+    top: 90%;  /* Adjust this to move the spinner down */
     transform: translate(-50%, -50%);
 }
+
 
 @keyframes spin {
     0% { transform: rotate(0deg); }

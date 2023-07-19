@@ -38,8 +38,14 @@ app.post("/predict", upload.single('image'), async (req: Request, res: Response)
 
             // Send back the base64 image from the FastAPI server
             res.json({ base64_image: fastApiRes.data.base64_image });
-        } catch (err) {
-            console.error("Error Calling to the FastAPI backend:", (err as any).response ? (err as any).response : err)
+        } catch (err: any) {
+            console.error("Error Calling to the FastAPI backend:", err?.response || err)
+            if (err?.response?.data?.error) {
+                // Send the error message from FastAPI to the frontend
+                res.status(500).send(err.response.data.error);
+            } else {
+                res.status(500).send("An unknown error occurred.");
+            }
         }
     } else {
         res.status(400).send("No file uploaded.");

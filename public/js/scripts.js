@@ -14,7 +14,7 @@ function handleFormSubmission() {
             body: formData
         }).then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Error during image processing, Try another image');
             }
             return response.json();
         }).then(data => {
@@ -34,7 +34,8 @@ function handleFormSubmission() {
             loadingSpinner.style.display = 'none';
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
-
+            // Display the error message from the backend
+            alert(error.message);
             // Stop the spinner even if there's an error
             loadingSpinner.style.display = 'none';
         });
