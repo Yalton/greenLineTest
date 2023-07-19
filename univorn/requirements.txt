@@ -4,7 +4,7 @@ scipy
 aiohttp
 beautifulsoup4
 webencodings
-protobuf==3.20.0
+protobuf==3.20
 tensorflow==2.10.0
 tensorflow_hub
 pillow==9.3.0
