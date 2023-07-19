@@ -196,9 +196,9 @@ Project Link: [https://github.com/Yalton/greenLineTest](https://github.com/Yalto
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+<!-- ## Acknowledgments
 
-* [InspirationRedditPost](https://www.reddit.com/r/KickStreaming/comments/14fv85p/how_you_can_download_kick_vods/)
+* [InspirationRedditPost](https://www.reddit.com/r/KickStreaming/comments/14fv85p/how_you_can_download_kick_vods/) -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -207,9 +207,6 @@ Project Link: [https://github.com/Yalton/greenLineTest](https://github.com/Yalto
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-
-
-* [![OpenCV][opencv-badge]][opencv-url]
 
 [tensorflow-badge]: https://img.shields.io/badge/Tensorflow-ffff00?style=for-the-badge&logo=tensorflow&logoColor=yellow
 [tensorflow-url]: https://www.tensorflow.org/
