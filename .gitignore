@@ -46,7 +46,7 @@ Temporary Items
 
 dist/
 __pycache__/
-
+__pycache__/*
 imgs/
 my_database.db
 
