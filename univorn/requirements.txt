@@ -4,7 +4,7 @@ scipy
 aiohttp
 beautifulsoup4
 webencodings
-protobuf
+protobuf>=3.19.6
 tensorflow==2.10.0
 tensorflow_hub
 pillow
@@ -16,4 +16,4 @@ uvicorn
 opencv-python
 matplotlib
 pydantic==1.8.2
-typing_extensions==3.10.0.2
+typing_extensions>=4.5.0
