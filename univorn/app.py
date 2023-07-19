@@ -89,7 +89,7 @@ async def predict(item: Item):
         keypoints_with_scores = outputs['output_0'].numpy()[:,:,:51].reshape((6,17,3))
 
         #pairs = [(0, 1), (0, 2), (0, 3), (0, 4), (5, 6), (11, 12), (13, 14), (15, 16)]
-        pairs = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16)]
+        pairs = [(1, 2), (3, 4), (5, 6), (7, 8), (11, 12), (13, 14), (15, 16)]
 
         # Create a figure and axes
         fig1, ax1 = plt.subplots(figsize=(10, 10))  # For bounding boxes
