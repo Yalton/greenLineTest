@@ -207,6 +207,17 @@ Project Link: [https://github.com/Yalton/kickVlogDL](https://github.com/Yalton/k
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+
+
+* [![OpenCV][opencv-badge]][opencv-url]
+
+[tensorflow-badge]: https://img.shields.io/badge/Tensorflow-ffff00?style=for-the-badge&logo=tensorflow&logoColor=yellow
+[tensorflow-url]: https://www.tensorflow.org/
+
+
+[opencv-badge]: https://img.shields.io/badge/OpenCV-ff0000?style=for-the-badge&logo=opencv&logoColor=black
+[opencv-url]: https://opencv.org/
+
 [nodejs-badge]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white
 [nodejs-url]: https://nodejs.org
 
