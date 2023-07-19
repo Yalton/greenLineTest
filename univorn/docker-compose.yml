@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.3'  # You must use version 2.3 or higher to use the runtime option
 
 services:
   app:
@@ -9,3 +9,12 @@ services:
       - 80:80
     volumes:
       - ./:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all  # Use all GPUs
+            capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
