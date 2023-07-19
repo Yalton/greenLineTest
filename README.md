@@ -1,4 +1,4 @@
-# kickVlogDL 
+# greenLineTest 
 <a name="readme-top"></a>
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -10,21 +10,21 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/Yalton/kickVlogDL">
+  <a href="https://github.com/Yalton/greenLineTest">
     <img src="public/logo.png" alt="Logo" width="80" height="80">
   </a>
-  <h3 align="center">kickVlogDL - Kick VOD Downloader</h3>
+  <h3 align="center">greenLineTest - Green Line test</h3>
   <p align="center">
-    Simple tool designed to download kick VODs
+    Web app designed to assign you a chad score based on the green line test
     <br />
-    <a href="https://github.com/Yalton/kickVlogDL"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Yalton/greenLineTest"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Yalton/kickVlogDL">View Demo</a>
+    <a href="https://github.com/Yalton/greenLineTest">View Demo</a>
     ·
-    <a href="https://github.com/Yalton/kickVlogDL/issues">Report Bug</a>
+    <a href="https://github.com/Yalton/greenLineTest/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Yalton/kickVlogDL/issues">Request Feature</a>
+    <a href="https://github.com/Yalton/greenLineTest/issues">Request Feature</a>
   </p>
 </div>
 <details>
@@ -98,7 +98,7 @@ You will require some local system packages to make the app function properly
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/Yalton/kickVlogDL.git
+   git clone https://github.com/Yalton/greenLineTest.git
    ```
 2. Install nvm (Node Version Manager)
    ```sh
@@ -156,7 +156,7 @@ Either solution will be accesible from the same interface @ localhost:3000 -->
 - [ ] Improve model which detects people (Dark colors and obscured figures confuse it currently)
 - [ ] Add more features in general 
 
-See the [open issues](https://github.com/Yalton/kickVlogDL/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/Yalton/greenLineTest/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -189,7 +189,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Dalton Bailey - [@yalt7117](https://twitter.com/yalt7117) - drbailey117@gmail.com
 
-Project Link: [https://github.com/Yalton/kickVlogDL](https://github.com/Yalton/kickVlogDL)
+Project Link: [https://github.com/Yalton/greenLineTest](https://github.com/Yalton/greenLineTest)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -236,16 +236,16 @@ Project Link: [https://github.com/Yalton/kickVlogDL](https://github.com/Yalton/k
 
 [python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [python-url]: https://www.python.org
-[contributors-shield]: https://img.shields.io/github/contributors/Yalton/kickVlogDL.svg?style=for-the-badge
-[contributors-url]: https://github.com/Yalton/kickVlogDL/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Yalton/kickVlogDL.svg?style=for-the-badge
-[forks-url]: https://github.com/Yalton/kickVlogDL/network/members
-[stars-shield]: https://img.shields.io/github/stars/Yalton/kickVlogDL.svg?style=for-the-badge
-[stars-url]: https://github.com/Yalton/kickVlogDL/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Yalton/kickVlogDL.svg?style=for-the-badge
-[issues-url]: https://github.com/Yalton/kickVlogDL/issues
-[license-shield]: https://img.shields.io/github/license/Yalton/kickVlogDL.svg?style=for-the-badge
-[license-url]: https://github.com/Yalton/kickVlogDL/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/Yalton/greenLineTest.svg?style=for-the-badge
+[contributors-url]: https://github.com/Yalton/greenLineTest/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Yalton/greenLineTest.svg?style=for-the-badge
+[forks-url]: https://github.com/Yalton/greenLineTest/network/members
+[stars-shield]: https://img.shields.io/github/stars/Yalton/greenLineTest.svg?style=for-the-badge
+[stars-url]: https://github.com/Yalton/greenLineTest/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Yalton/greenLineTest.svg?style=for-the-badge
+[issues-url]: https://github.com/Yalton/greenLineTest/issues
+[license-shield]: https://img.shields.io/github/license/Yalton/greenLineTest.svg?style=for-the-badge
+[license-url]: https://github.com/Yalton/greenLineTest/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/dalton-r-bailey
 [product-screenshot]: images/screenshot.png
