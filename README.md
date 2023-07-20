@@ -81,70 +81,111 @@ Offical Hosted Instance is available at [link](https://greenlinetest.billbert.co
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+<!-- ## Getting Started
 
-Clone the repository to your local system 
-<!-- 
-### Prerequisites
+Clone the repository to your local system  -->
 
-You will require some local system packages to make the app function properly 
-* apt
-  ```sh
-  apt install ffmpeg chromium aria2c npm
-  ```
+### Installation 
 
-### Installation
-
+#### Node Endpoint
 
 1. Clone the repo
    ```sh
    git clone https://github.com/Yalton/greenLineTest.git
    ```
-2. Install nvm (Node Version Manager)
+2. Change this line in src/index.ts to whatever IP the Univorn endpoint will be running on 
+   ```sh
+   const fastApiRes = await axios.post('http://127.0.0.1:8000/predict', { base64_image });
+   ```
+3. Install nvm (Node Version Manager)
    ```sh
    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
    ```
-3. Install node version 17 
+4. Install node version 17 
    ```
     nvm install 17
    ```
-4. Use node version 17 
+5. Use node version 17 
     ```
     nvm use 17
     ```
-5. Install uuid and save-dev (Behaves weirdly so we do this seperate)
+6. Install uuid and save-dev (Behaves weirdly so we do this seperate)
    ```
     npm install uuid
-    npm install --save-dev @types/uuid
+    npm install --save-dev @types/multer
    ```
-6. Install NPM packages
+7. Install NPM packages
    ```sh
    npm update
    ```
-7. Build Typescript backend 
+8. Build Typescript backend 
    ```
    npm run build
    ```
-8. Start the server
+9. Start the server
    ```
     npm start
    ```
 
-#### Dockerized 
+   
+#### Univorn Endpoint
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/Yalton/greenLineTest.git
+   ```
+
+2. Install OpenCV Dependencies
+   ```sh
+    apt-get update && apt-get install -y \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgl1-mesa-glx
+    ```
+
+3. Install packages from Univorn directory 
+   ```sh
+   pip3 install -r univorn/requirements.txt 
+   ```
+4. Run the Server (Within the Univorn directory)
+   ```sh
+   cd univorn
+   uvicorn app:app --host 0.0.0.0 --port 8000
+   ```
+#### Dockerized (Node)
 
 Follow steps 1-6
 
-8. Build the container
+7. Build the container
    ```
     docker compose build
    ```
 
-9. Build the container
+8. Build the container
    ```
     docker compose up -d
    ```
 
-Either solution will be accesible from the same interface @ localhost:3000 -->
+#### Dockerized (Univorn)
+
+1. Enter Univorn Directory
+   ```
+   cd univorn
+   ```
+2. Build the container
+   ```
+    docker compose build
+   ```
+
+3. Deploy the container
+   ```
+    docker compose up -d
+   ```
+
+Bare metal accesible @ localhost:3000
+
+Dockerized Bare metal accesible @ localhost:3030
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
